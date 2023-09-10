@@ -4,8 +4,8 @@ on:
   workflow_call:
 
 jobs:
-  set_version:
-    name: "Set Version"
+  prepare:
+    name: "Prepare"
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -14,8 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - run: |
+      - name: Set Version
+        run: |
           node -e "const fs = require('fs'); 
           const commitHash = process.argv[1]; 
           const date = new Date(); 
