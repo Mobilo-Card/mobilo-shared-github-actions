@@ -1,0 +1,18 @@
+name: "Update Package Version"
+description: "Updates package.json version using Git hash and current date-time"
+
+inputs:
+  none:
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        node -e "const fs = require('fs'); 
+        const commitHash = process.argv[1]; 
+        const date = new Date(); 
+        const formattedDate = (date.getMonth() + 1) + ' ' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes(); 
+        const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8')); 
+        packageJson.version = commitHash.substring(0, 7) + '[' + formattedDate + ']'; 
+        fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));" $(git rev-parse HEAD)
+      shell: bash
